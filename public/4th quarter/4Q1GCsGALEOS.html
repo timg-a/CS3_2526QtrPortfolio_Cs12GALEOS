@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>comsci</title>
+</head>
+
+<style>
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Star System */
+
+.stars>label {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.stars input {
+    display: none;
+}
+
+.stars input:checked~label>span.star,
+.stars>label:hover~input~label>span.star{
+  color: #ddd;
+}
+
+.stars span.star,
+.stars:hover>input+label>span.star,
+.stars>input:checked+label>span.star,
+.stars>input~label:hover>span.star{
+  color: gold;
+}
+
+/* End of star system */
+
+form {
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 5%;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+form input {
+    width: 95%;
+    padding: 7px;
+    padding-left: 10px; padding-right: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form select {
+    width: 100%;
+    padding: 7px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form .title {
+    text-align: left;
+}
+
+</style>
+
+<body>
+    <form action="javascript:addMovie()">
+
+        <h2>Add a Movie</h2>
+
+        <div class="title">Title:</div><input id="title" type="text">
+        <br><br>
+        <div class="title">Year:</div><input id="year" type="text">
+        <br><br>
+        <div class="title">Genre:</div><select id="genre" name="genre">
+            <option value="Action">Action</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Drama">Drama</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Sci-fi">Sci-Fi</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Western">Western</option>
+        </select>
+        <br><br>
+        <div class="title">Rating:</div>
+        <div class="stars">
+            <input type="radio" name="rating" id="1"><label for="1"><span aria-hidden="true" class="star">&#9733;</span></label>
+            <input type="radio" name="rating" id="2"><label for="2"><span aria-hidden="true" class="star">&#9733;</span></label>
+            <input type="radio" name="rating" id="3"><label for="3"><span aria-hidden="true" class="star">&#9733;</span></label>
+            <input type="radio" name="rating" id="4"><label for="4"><span aria-hidden="true" class="star">&#9733;</span></label>
+            <input type="radio" name="rating" id="5"><label for="5"><span aria-hidden="true" class="star">&#9733;</span></label>
+        </div>
+        <br>
+        <button type="submit">Add Movie</button>
+
+    </form><br>
+    <h2>Movie List</h2><br><br>
+    <span id="movies"></span>
+</body>
+
+<script>
+
+    let movieList = [];
+
+    function addMovie() {
+
+        let title = document.getElementById("title").value;
+        let year = document.getElementById("year").value;
+        let genre = document.getElementById("genre").value;
+        let rating = parseInt(document.querySelector('input[name="rating"]:checked').id);
+        let object = {title: title, year: year, genre: genre, rating: rating};
+        let ratingString = "";
+        
+        for (let i = 0; i < rating; i++) {
+            ratingString += "\u2605";
+        }
+
+        localStorage.setItem(title, JSON.stringify(object));
+
+        let displayString = JSON.parse(localStorage.getItem(title)).title + " (" + JSON.parse(localStorage.getItem(title)).year + ") - " + JSON.parse(localStorage.getItem(title)).genre + ", Rating: " + JSON.parse(JSON.stringify(ratingString)) + "<br>";
+
+        movieList.push(displayString);
+
+        localStorage.setItem("movieList", JSON.stringify(movieList));
+
+        document.getElementById("movies").innerHTML = JSON.parse(localStorage.getItem("movieList")).join("");
+
+
+        }
+</script>
+
+</html>
