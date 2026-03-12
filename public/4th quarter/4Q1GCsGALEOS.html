@@ -119,6 +119,7 @@ form .title {
         let rating = parseInt(document.querySelector('input[name="rating"]:checked').id);
         let object = {title: title, year: year, genre: genre, rating: rating};
         let ratingString = "";
+        let deleteButton = document.getElementById(title);
         
         for (let i = 0; i < rating; i++) {
             ratingString += "\u2605";
@@ -126,14 +127,21 @@ form .title {
 
         localStorage.setItem(title, JSON.stringify(object));
 
-        let displayString = JSON.parse(localStorage.getItem(title)).title + " (" + JSON.parse(localStorage.getItem(title)).year + ") - " + JSON.parse(localStorage.getItem(title)).genre + ", Rating: " + JSON.parse(JSON.stringify(ratingString)) + "<br>";
+        let displayString = JSON.parse(localStorage.getItem(title)).title + " (" + JSON.parse(localStorage.getItem(title)).year + ") - " + JSON.parse(localStorage.getItem(title)).genre + ", Rating: " + JSON.parse(JSON.stringify(ratingString)) + " <button id='" + title + "'>Delete</button><br>";
 
         movieList.push(displayString);
 
         localStorage.setItem("movieList", JSON.stringify(movieList));
 
-        document.getElementById("movies").innerHTML = JSON.parse(localStorage.getItem("movieList")).join("");
+        if (deleteButton) {
+            deleteButton.addEventListener("click", function() {
+                localStorage.removeItem(title);
+                movieList = JSON.parse(localStorage.getItem("movieList")).filter(movie => !movie.includes(title));
+                localStorage.setItem("movieList", JSON.stringify(movieList));
+            });
+        }
 
+        document.getElementById("movies").innerHTML = JSON.parse(localStorage.getItem("movieList")).join("");
 
         }
 </script>
